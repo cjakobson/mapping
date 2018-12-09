@@ -33,7 +33,6 @@ m=1;
 tic
 for i=(window+1):(nLoci-window)
     
-    %idxToUse=ismember(coveredChroms(1:end,:),chromosomes(i,:),'rows');
     %build tree based on 500 variant sliding window
     idxToUse=(i-window):(i+window);
     
@@ -46,10 +45,6 @@ for i=(window+1):(nLoci-window)
     end
     
     tree=seqneighjoin(strainDist,'equivar',paradoxusStrains);
-    %subplot(4,4,i)
-    %plot(tree,'orient','top')
-    %plot(tree,'Type','equalangle')
-    %title(['chromosome ' chromosomes(i,:)]);
     
     genotypeToUse=coveredParadoxusGenotype(idxToUse,:);
     
@@ -136,7 +131,6 @@ xlim([0 4])
 
 %plot bars
 subplot(2,3,4)
-%bar([sum(nAlt==1)/length(nAlt),sum(nAlt~=1)/length(nAlt)])
 bar([sum(nAlt==1),mean(nUnique);sum(nAlt~=1),mean(nShared)])
 hold on
 scatter(ones(1,10)*1.05+rand(1,10)*0.2,nUnique,'k','filled')
@@ -146,7 +140,6 @@ xlim([0.5 2.5])
 title('unique/shared')
 
 subplot(2,3,5)
-%bar([sum((nInferred==1).*(nAlt>1))/sum((nInferred>=1).*(nAlt>1)),sum((nInferred>1).*(nAlt>1))/sum((nInferred>=1).*(nAlt>1))])
 bar([sum((nInferred==1).*(nAlt>1)),mean(nNotParallel);sum((nInferred>1).*(nAlt>1)),mean(nParallel)])
 hold on
 scatter(ones(1,10)*1.05+rand(1,10)*0.2,nNotParallel,'k','filled')

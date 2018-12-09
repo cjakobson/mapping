@@ -4,8 +4,6 @@ function [distOut,arrayOut]=variantTypes(inputArray)
 variantArray={'missense_variant','synonymous_variant','upstream_gene_variant',...
     'downstream_gene_variant','intergenic_region'};
 
-%variantArray={'missense_variant','synonymous_variant','intergenic_region'};    
-    
 arrayOut=zeros(1,length(inputArray));
 
 for i=1:length(inputArray)

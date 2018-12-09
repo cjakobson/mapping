@@ -35,6 +35,5 @@ for i=1:length(branches)    %impute genotypes/conficts at branch points
 
 end
 
-%vInferred
 
 end

@@ -19,11 +19,8 @@ strains={'BC187','DBVPG1106','DBVPG1373','DBVPG1788','DBVPG6044',...
 
 cleanStrains={'BC187','DBVPG6044','SK1','UWOPS03-461.4','UWOPS83-787.3','UWOPS87-2421',...
     'W303','Y12','Y55','YPS128','wine/European'};
-%cleanStrains={'BC187','DBVPG6044','UWOPS03-461.4','Y12','YPS128','wine/European'};
-%cleanStrains={'BC187','DBVPG6044','UWOPS03-461.4','UWOPS83-787.3','Y12','YPS128','wine/European'};
 wineEuroIdx=[2 3 4 6 7 8 16 17 18]; %use these idx to condense wine/Euro genotypes (modal)
 cleanIdx=[1 5 9 10 11 12 13 14 15 19];
-%cleanIdx=[1 5 10 11 14 19];
 
 cleanGenotype=genotype(:,cleanIdx);
 wineEuroGenotype=mode(genotype(:,wineEuroIdx),2);
@@ -50,7 +47,6 @@ tic
 window=250;
 for i=(window+1):(nLoci-window)
     
-    %idxToUse=ismember(coveredChroms(1:end,:),chromosomes(i,:),'rows');
     %build tree based on sliding window
     idxToUse=(i-window):(i+window);
     
@@ -63,9 +59,7 @@ for i=(window+1):(nLoci-window)
     end
     
     tree=seqneighjoin(strainDist,'equivar',cleanStrains);
-    %subplot(4,4,i)
     if (i==7500)||(i==17500)
-        %plot(tree,'orient','top')
         plot(tree,'Type','equalangle')
         title(['chromosome ' coveredChroms(i,:) 'position ' num2str(coveredPos(i))]);
     end
@@ -187,7 +181,6 @@ axis square
 
 %plot bars
 subplot(2,3,4)
-%bar([sum(nAlt==1)/length(nAlt),sum(nAlt~=1)/length(nAlt)])
 bar([sum(nAlt==1),mean(nUnique);sum(nAlt~=1),mean(nShared)])
 hold on
 scatter(ones(1,10)*1.05+rand(1,10)*0.2,nUnique,'k','filled')
@@ -196,7 +189,6 @@ xlim([0.5 2.5])
 title('unique/shared')
 
 subplot(2,3,5)
-%bar([sum((nInferred==1).*(nAlt>1))/sum((nInferred>=1).*(nAlt>1)),sum((nInferred>1).*(nAlt>1))/sum((nInferred>=1).*(nAlt>1))])
 bar([sum((nInferred==1).*(nAlt>1)),mean(nNotParallel);sum((nInferred>1).*(nAlt>1)),mean(nParallel)])
 hold on
 scatter(ones(1,10)*1.05+rand(1,10)*0.2,nNotParallel,'k','filled')
@@ -245,7 +237,7 @@ writetable(toOutput,'sgrpInference.csv');
 [~, idx]=sort(nInferred);
 
 %shift idx by window
-idx=idx+250;
+idx=idx+window;
 
 query=idx(end-100);
 
