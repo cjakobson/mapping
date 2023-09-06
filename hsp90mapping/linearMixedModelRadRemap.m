@@ -3,11 +3,6 @@
 
 function [] = linearMixedModelRadRemap(traitIdx,doHets,doFineMapping)
 
-%Pathname='/Users/cjakobson/Dropbox/JaroszLab/yeastCrossNutrientScreen/crosscrossdata/regression/modelSelection/incremental'
-
-% if Pathname(length(Pathname)) ~= '/'
-%     Pathname = [Pathname,'/'];
-% end
 
 if ischar(traitIdx)
     traitIdx=str2num(traitIdx);
@@ -111,8 +106,6 @@ toc     %this fit takes about 25min on sherlock
 
 %now add in het terms and refit
 
-%doHets=1;
-
 if doHets
 
 load('phasedVLCgenotype.mat')
@@ -200,9 +193,6 @@ toc     %this fit takes about 5 min
 end
 %now do fine mapping
 
-%map all variants (discard those w poor pVals later)
-%just consider +/-***10*** positions for now (could incorporate chr info later,
-%if need be)
 tic
 
 if doFineMapping
@@ -259,7 +249,7 @@ end
 
 
 %%% Calculate percentage of variance explained by each predictor in
-%%% the model (only does this for regular loci, not dominant loci)
+%%% the model
 sumR = zeros(length(bPos),1);
 varianceExplained = zeros(length(bPos),1);
 for i = 1:length(bPos)

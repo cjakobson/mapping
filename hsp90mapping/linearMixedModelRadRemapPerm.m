@@ -3,11 +3,6 @@
 
 function [] = linearMixedModelRadRemapPerm(traitIdx,nPerms)
 
-%Pathname='/Users/cjakobson/Dropbox/JaroszLab/yeastCrossNutrientScreen/crosscrossdata/regression/modelSelection/incremental'
-
-% if Pathname(length(Pathname)) ~= '/'
-%     Pathname = [Pathname,'/'];
-% end
 
 if ischar(traitIdx)
     traitIdx=str2num(traitIdx);

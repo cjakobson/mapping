@@ -1,6 +1,6 @@
 %scrape data from mapping output and save table of results
 
-clear all
+clear
 
 set(0,'DefaultLineLineWidth',2)
 set(0,'DefaultFigureColor','w')
@@ -10,7 +10,7 @@ figureCounter=1;
 
 
 %load info on variants
-variantInfo=readtable('/Users/cjakobson/Dropbox/JaroszLab/211028_SegregantProteomicsData_V1/variantInfoStructure.csv');
+variantInfo=readtable('variantInfoStructure.csv');
 
 
 load('radRemapFilename.mat')
@@ -66,7 +66,7 @@ for q=1:length(conditions)
                 end
             else %check for QTGs
                 tempIdx=posToMap(m)+vTemp-11;
-                if (length(tempIdx)>1)%&&(sum(ismember(vTemp,11))>0)
+                if (length(tempIdx)>1)
                     toLookup=mod(tempIdx-41,12054);
                     tempTable=array2table([variantInfo.gene1(toLookup)...
                         variantInfo.gene2(toLookup)]);
@@ -99,12 +99,6 @@ for q=1:length(conditions)
             vPval(o)=pValues(m);
             vBeta(o)=b_fwselection(bPos(m));
             vVarExp(o)=varianceExplained(m);
-
-%             if bPos(m)>41
-%                 vIndex(o)=mod(bPos(m)-41,12054);
-%             else
-%                 vIndex(o)=0;
-%             end
 
             if qtlIsQtn(m)
                 vIsQtn(o)=1;
@@ -203,7 +197,6 @@ for i=1:length(conditions)
 
             tempIdx=logical(conditionIdx.*timeIdx);
 
-            %tempBpos=toOutput.bPos(tempIdx);
             tempBpos=toOutput.bestCandidate(tempIdx);
 
             for l=1:length(tempBpos)
@@ -220,16 +213,11 @@ for i=1:length(conditions)
                     deltaZbuffer(m)=mean(bufferTrait(idx1),'omitnan')-...
                         mean(bufferTrait(idx2),'omitnan');
                     
-                    %dominanceBaseline(m)=0;
-                    %dominanceBuffer(m)=0;
-                    
                     %calculate dominance for linear loci too, for
                     %prioritization
                     %also calcultate extent of dominance [fully RM = 1;
                     %fully YJM = -1]
-                    %idx3=modelGenotypes(:,posQuery-12054)==1;
                     idx3=modelGenotypes(:,posQuery+12054)==0;
-                    %idx4=modelGenotypes(:,posQuery-12054)==-1;
                     idx4=modelGenotypes(:,posQuery+12054)==1;
                     
                     tempRmZ=mean(baselineTrait(idx3),'omitnan');
@@ -237,10 +225,8 @@ for i=1:length(conditions)
                     
                     %quantities are swapped relative to below
                     if (deltaZbaseline(m)*tempRmZ)>0
-                        %dominanceBaseline(m)=deltaZbaseline(m)/tempRmZ;
                         dominanceBaseline(m)=tempRmZ/deltaZbaseline(m);
                     elseif (deltaZbaseline(m)*tempYjmZ)>0
-                        %dominanceBaseline(m)=-deltaZbaseline(m)/tempYjmZ;
                         dominanceBaseline(m)=-tempYjmZ/deltaZbaseline(m);
                     else
                         dominanceBaseline(m)=0;
@@ -250,10 +236,8 @@ for i=1:length(conditions)
                     tempYjmZ=mean(bufferTrait(idx4),'omitnan');
                     
                     if (deltaZbuffer(m)*tempRmZ)>0
-                        %dominanceBuffer(m)=deltaZbuffer(m)/tempRmZ;
                         dominanceBuffer(m)=tempRmZ/deltaZbuffer(m);
                     elseif (deltaZbuffer(m)*tempYjmZ)>0
-                        %dominanceBuffer(m)=-deltaZbuffer(m)/tempYjmZ;
                         dominanceBuffer(m)=-tempYjmZ/deltaZbuffer(m);
                     else
                         dominanceBuffer(m)=0;
@@ -441,7 +425,7 @@ toOutput=[toOutput chapTable];
 
 
 %also annotate with ase information
-aseData=readtable('/Users/cjakobson/Dropbox/JaroszLab/hsp90mapping/harmonizeRnaSeqAnalysis/radAseData.csv');
+aseData=readtable('radAseData.csv');
 
 
 
